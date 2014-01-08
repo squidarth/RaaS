@@ -20,4 +20,9 @@ def clone_git():
   print "Checked out git repo"
 
 def restart_flask_app():
-  print "restarting flask app"
+  run("kill -SIGHUP `cat /tmp/supervisord.pid`")
+  print "restarted flask app"
+
+def deploy():
+  clone_git()
+  restart_flask_app()

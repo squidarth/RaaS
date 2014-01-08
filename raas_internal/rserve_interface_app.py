@@ -1,5 +1,9 @@
 from flask import Flask
 from flask import request
+from tornado.wsgi import WSGIContainer
+from tornado.httpserver import HTTPServer
+from tornado.ioloop import IOLoop
+
 import sys
 import pyRserve
 
@@ -24,4 +28,6 @@ if __name__ == "__main__":
   if len(sys.argv) > 1:
     rserve_port = sys.argv.get[1]
   conn = pyRserve.connect()
-  app.run()
+  http_server = HTTPServer(WSGIContainer(app))
+  http_server.listen(5000)
+  IOLoop.instance().start()
