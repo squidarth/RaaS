@@ -20,8 +20,7 @@ def root_entry():
     print "%s: %s" % (key, request.args[key])
 
   result = conn.eval(request.args["request"])
-  return "blah"
-  #return "Result: %s" % str(result)
+  return "Result: %s" % str(result)
 
 
 if __name__ == "__main__":
