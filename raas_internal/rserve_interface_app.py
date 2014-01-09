@@ -1,5 +1,4 @@
-from flask import Flask
-from flask import request
+from flask import *
 from tornado.wsgi import WSGIContainer
 from tornado.httpserver import HTTPServer
 from tornado.ioloop import IOLoop
@@ -14,13 +13,14 @@ conn = None
 def wrap_input(inp):
   return "capture.output(%s)" % inp
 
-@app.route("/eval")
+@app.route("/eval", methods=["POST"])
 def root_entry():
-  for key in request.args:
-    print "%s: %s" % (key, request.args[key])
-
-  result = conn.eval(request.args["request"])
-  return "Result: %s" % str(result)
+  print "Request:"
+  for key in request.form:
+    print "%s: %s" % (key, request.form[key])
+  print ""
+  result = conn.eval(wrap_input(request.form["request"]))
+  return jsonify(result=str(result))
 
 
 if __name__ == "__main__":
