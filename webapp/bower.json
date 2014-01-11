@@ -1,0 +1,22 @@
+{
+  "name": "webapp",
+  "version": "0.0.0",
+  "homepage": "https://github.com/squidarth/RaaS",
+  "authors": [
+    "Sid Shanker <sshanker220@gmail.com>"
+  ],
+  "description": "Client of RaaS",
+  "main": "public/style.css",
+  "license": "MIT",
+  "dependencies": {
+    "angular" : "*",
+    "ember" : "*"
+  },
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

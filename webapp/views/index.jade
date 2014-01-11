@@ -1,5 +1,54 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+
+  script(type="text/x-handlebars" id="post")
+    div#editor-area
+      {{textarea value=code}}
+
+    h1 {{title}}
+    h3.
+     by {{author.name}} <small class="muted">{{date}}</small>
+    p.
+      <i>{{excerpt}}</i>
+    p.
+      {{text}}
+
+  script(type="text/x-handlebars" data-template-name="editor-view")
+    {{textarea idBinding="editor-area" value=code}}
+
+  script(type="text/x-handlebars" id="about")
+    div(class="about")
+      h1 About section
+
+  script(type="text/x-handlebars" id="posts")
+    div(class="posts")
+      div(class="container-fluid")
+        div(class="row-fluid")
+          div(class="span3")
+            table(class="table")
+              thead
+                tr
+                  th Recent Posts
+              {{#each}}
+              tr
+                td
+                  {{#link-to 'post' this}} 
+                  {{title}} 
+                  small(class="muted") by {{author.name}}
+                  {{/link-to}}
+              {{/each}}
+          div(class="span9")
+            {{outlet}}
+
+
+  script(type="text/x-handlebars")
+    div(class="navbar")
+      div(class="navbar-inner")
+        a(class="brand" href="#") R as a Service
+        ul(class="nav")
+          li.
+            {{#link-to 'posts'}}Posts{{/link-to}}
+          li.
+            {{#link-to 'about'}}About{{/link-to}}
+    {{outlet}}
