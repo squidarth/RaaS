@@ -7,9 +7,23 @@ App.Router.map(function() {
   });
 });
 
+
 App.PostsRoute = Ember.Route.extend({
   model: function() {
     return posts;
+  },
+  renderTemplate: function() {
+    var postsTemplate = this.render('posts');
+    Ember.run.next(this, function() {
+      $(".shell-editor").find(".CodeMirror").remove();
+      var shell = Shell.fromTextArea($(document).find(".shell-editor textarea")[0], {
+         mode: "r",
+         autofocus: true,
+         theme: 'blackboard'
+      });
+
+      shell.cm.setSize(null, 200);
+    });
   }
 });
 
@@ -25,27 +39,31 @@ App.PostController = Ember.ObjectController.extend({
       this.set("isEditing", false);
     }
   }
-
 });
 
 App.PostRoute = Ember.Route.extend({
   model: function(params) {
-    return posts.findBy('id', params.post_id); 
+    return posts.postList.findBy('id', params.post_id); 
   },
   renderTemplate: function() {
     var post = this.render('post');
     Ember.run.next(this, function() {
+      $("#editor-area").find(".CodeMirror").remove();  
       CodeMirror.fromTextArea($(document).find("#editor-area textarea")[0], {
         mode: "r",
         autofocus: true,
         lineNumbers: true,
         theme: 'blackboard'
       });
+
+      $("#editor-area #editor-loading").addClass("hidden");
     });
   }
 });
 
-var posts = [
+var posts = {
+  currentShellContent: "1 + 1;", 
+  postList: [
   {
     id: "1",
     title: "Hello",
@@ -63,10 +81,11 @@ var posts = [
     title: "The Parley Letter",
     author: {name: "someone else"},
     date: "2014-01-08",
-    code: "sum <- function(a,b){a+b}",
+    text: "sum <- function(a,b){a+b}",
     excerpt: "My journeys to the east",
-    text: "It was a dark night that my journey began.  THe orient seemed so\
-      far away, so unattainable, but nevertheless, our path must take us there.\
-      Marco looked at me, big eyes, wondering if we'd ever make it.  We must."
+    code: "It was a dark\n ni\nght th\nat \nmy journey began.  \nTHe orient seemed so\
+      far away, \nso unatta\nina\nble, but nevertheless, our path must take us there.\
+      M\narc\no look\ned \nat \nme, \nbi\ng e\nye\ns, \nwon\nder\ni\nn\ng \nif \nwe\n'd ever make it.  We must."
   }
-];
+]
+};
