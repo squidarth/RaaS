@@ -9,6 +9,11 @@
     "express": "3.4.7",
     "redis" : "*",
     "jade": "*",
-    "bower" : "*"
+    "bower" : "*",
+    "passport" : "*",
+    "passport-local" : "*",
+    "mongoose" : "*",
+    "passport-local-mongoose" : "*",
+    "connect-redis" : "*"
   }
 }

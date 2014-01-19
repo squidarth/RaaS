@@ -25,12 +25,15 @@ window.Shell = (function() {
     cm.outputLineList = outputLineList;
 
     shell.cm = cm;
-    shell.addOutput("adsfasdf"); 
     return shell;
   };
 
   Shell.prototype.getCm = function() {
     return this.cm;
+  };
+
+  Shell.prototype.getDoc = function() {
+    return this.cm.getDoc();
   };
 
   Shell.prototype.addOutput = function(content) {

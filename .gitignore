@@ -3,3 +3,4 @@
 *.pyc
 .vagrant
 webapp/node_modules
+npm-debug.log

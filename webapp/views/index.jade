@@ -18,10 +18,12 @@ block content
       h1 hello
        
   script(type="text/x-handlebars" id="posts")
+    {{view App.NavbarView}}
+    
     div(class="posts")
       div(class="container-fluid")
-        div(class="row-fluid")
-          div(class="span3")
+        div(class="row")
+          div(class="col-md-3")
             table(class="table")
               thead
                 tr
@@ -34,22 +36,180 @@ block content
                   small(class="muted") by {{author.name}}
                   {{/link-to}}
               {{/each}}
-          div(class="span9")
+          div(class="col-md-9")
             {{outlet}}
-        div(class="row-fluid")
-          div(class="span6") 
+        div(class="row")
+          div(class="col-md-6") 
             h3 Shell
             div(class="shell-editor") 
               {{textarea value=currentShellContent}}
 
 
-  script(type="text/x-handlebars")
-    div(class="navbar")
-      div(class="navbar-inner")
-        a(class="brand" href="#") R as a Service
-        ul(class="nav")
-          li.
-            {{#link-to 'posts'}}Posts{{/link-to}}
-          li.
-            {{#link-to 'about'}}About{{/link-to}}
+  script(type="text/x-handlebars" id="home")
+    div(class="container") 
+      h1.bs-masthead.title R as a Service
+
+      div(class="row")
+        div(class="col-md-5")
+          h3.subheading Best way to use R in the cloud.
+          p.
+            Sick of having to manually set up servers on Amazon to
+            run your data analysis? Let us do it for you. 
+          h4
+            b Features:
+          ul
+            li 
+              b Elasticity.
+              p. 
+                Need an extra large Amazon EC2 instance to do some number crunching for you? 
+                No problem, massive compute power is just a click away.
+            li 
+              b An IDE.
+              p.
+                RaaS provides a slick IDE for you to edit your R code in the same
+                place that it runs.
+            li 
+              b Version Control Integration.
+              p.
+                Don't worry about losing your files anymore--we provide integration
+                with GitHub for version control.
+            li {{#link-to 'about'}}Read more! {{/link-to}}
+        
+        div(class="col-md-5")
+          {{#if App.homepage_notification}}
+          div(class="alert alert-warning fade in")
+            button(type="button" class="close" data-dismiss="alert") ×
+            p {{App.homepage_notification}} 
+          {{/if}}
+
+          {{#if login}} 
+          div(class="bs-example") 
+            h3 Log in! 
+            <form role="form" {{action 'loginFormSubmit' on='submit'}}>
+            div(class="form-group")
+              label(for="inputEmail") Email Address
+              {{input value=email type="email" class="form-control" placeholder="Enter email"}}
+      
+            div(class="form-group")
+              label(for="inputPassword") Password 
+              {{input value=password type="password" class="form-control" placeholder="Enter password"}}
+            {{#if error}}
+            div(class="alert alert-danger fade in")
+              button(type="button" class="close" data-dismiss="alert") ×
+              p {{error}}
+            {{/if}}
+            div(class="form-group")
+              button(id="submit" class="btn btn-primary btn-lg") Log in!
+              <a href="#" class="right-float right" {{action 'setSignup'}}>Sign up</a>
+             </form>
+          {{else}}
+          div(class="bs-example") 
+            <h3>Sign up!</h3> 
+            <form role="form" {{action 'signupFormSubmit' on='submit'}}>
+            <div class="form-group">
+            <label for="inputEmail">Email Address</label>
+            {{input value=email type="email" class="form-control" placeholder="Enter email"}}
+            </div> 
+         
+            <div class="form-group">
+            <label for="inputPassword">Password</label>
+            {{input value=password type="password" class="form-control" placeholder="Enter password"}}
+            </div> 
+              
+            <div class="form-group">
+            <label for="inputPasswordConfirmation">Password Confirmation</label>
+            {{input value=password_confirmation type="password" class="form-control" placeholder="Enter password again"}}
+            </div>
+
+            {{#if error}}
+            div(class="alert alert-danger fade in")
+              button(type="button" class="close" data-dismiss="alert") ×
+              p {{error}} 
+            {{/if}}
+            <div class="form-group">
+            <button id="submit" class="btn btn-primary btn-lg">Sign up!</button>
+            <a href="#" class="right-float right" {{action 'setLogin'}}>Log in</a>
+            </div>
+            </form>
+          {{/if}}
+
+  script(type="text/x-handlebars" id="workspaces")
+    {{view App.NavbarView}}
+    div(class="container") 
+      div(class="col-md-5") 
+        h3 Workspaces 
+        ul.list-group
+          {{#each workspaces}}
+          li.list-group-item {{#link-to 'workspace' this}}{{name}}{{/link-to}}
+          {{/each}}
+      
+        {{#if makingNewWorkspace}}  
+        <form class="form-inline" role="form" {{action 'submitNewWorkspace' on="submit"}} >
+        <div class="form-group"> 
+        <a class="cancel" {{action 'cancelNewWorkspace'}}>×</a>
+        </div>
+        <div class="form-group">
+        <label class="sr-only">Name</label>
+        {{input value=name class="form-control" type="name" placeholder="Enter name"}}  
+        </div>
+        <button type="submit" class="btn btn-default">Create workspace</button>      
+        </form>
+        {{else}} 
+        <a {{action 'makeNewWorkspace'}}>Make new workspace</a>
+        {{/if}}
+
+  script(type="text/x-handlebars" id="workspace")
+    {{view App.NavbarView}}
+    div(class="container")
+      p {{name}}
+
+  script(type="text/x-handlebars" id="settings")
+    {{view App.NavbarView}}
+    div(class="container")
+      div(class="col-md-5") 
+        h3 Settings 
+        <form role="form" {{action 'updateUserSubmit' on='submit'}}>
+        div(class="form-group")
+          label(for="inputEmail") Email Address
+          {{input value=email type="email" class="form-control" placeholder="Enter email"}}
+
+        div(class="form-group")
+          label(for="inputEmail") Name
+          {{input value=name type="text" class="form-control" placeholder="Enter name"}}
+        
+        div(class="form-group")
+          label(for="inputPassword") Password 
+          {{input value=password type="password" class="form-control" placeholder="Enter password"}}
+
+        div(class="form-group")
+          label(for="inputPassword") Confirm Password 
+          {{input value=password_confirmation type="password" class="form-control" placeholder="Enter password again"}}
+
+        {{#if error}}
+        div(class="alert alert-danger fade in")
+          button(type="button" class="close" data-dismiss="alert") ×
+          p {{error}}
+        {{/if}}
+        div(class="form-group")
+          button(id="submit" class="btn btn-primary") {{updateButtonText}}
+         </form>
+       
+  script(type="text/x-handlebars" id="navbar" data-template-name="navbar")
+    div(class="navbar navbar-default navbar-static-top")
+      div(class="container")
+        div(class="navbar-header")
+          a(class="navbar-brand" href="#") R as a Service
+        div(class="navbar-collapse collapse")
+          ul(class="nav navbar-nav")
+            li.
+              {{#link-to 'posts'}}Posts{{/link-to}}
+            li.
+              {{#link-to 'settings'}}Settings{{/link-to}}
+            li.
+              {{#link-to 'about'}}About{{/link-to}}
+            li(class="dropdown")
+              {{#link-to '' class="dropdown-toggle" data-toggle="dropdown"}} {{App.CurrentUser.email}}<b class="caret"></b>{{/link-to}}
+              ul(class="dropdown-menu" role="menu")
+                li <a {{action 'logout'}}>Logout</a>
+                
     {{outlet}}
