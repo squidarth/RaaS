@@ -65,6 +65,16 @@ var workspaceSchema = new Schema({
 
 workspaceSchema.plugin(timestamps, {});
 
+workspaceSchema.methods.toJSON = function() {
+  return {
+      user: this.user_id,
+      name: this.name,
+      created_at: this.created_at,
+      updated_at: this.updated_at,
+      id: this.id
+  }
+};
+
 var userSchema = new Schema({
   email: String,
   name: String
@@ -161,7 +171,7 @@ app.get("/workspaces", function(req, res) {
   var id = req.user.id;
 
   Workspace.find({user_id: id}, function(err, workspaces) {
-    res.json({workspaces: workspaces});
+    res.json({workspaces: workspaces.map(function(workspace) { return workspace.toJSON();})});
   });
 });
 
@@ -171,7 +181,7 @@ app.post("/workspaces", function(req, res) {
   var params = req.body.workspace;
   params.user_id = user_id;
   Workspace.create(req.body.workspace, function(error, workspace) {
-    res.json({workspace: workspace});
+    res.json({workspace: workspace.toJSON});
   }); });
 
 http.createServer(app).listen(app.get('port'), function(){

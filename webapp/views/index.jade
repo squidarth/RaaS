@@ -139,8 +139,8 @@ block content
       div(class="col-md-5") 
         h3 Workspaces 
         ul.list-group
-          {{#each workspaces}}
-          li.list-group-item {{#link-to 'workspace' this}}{{name}}{{/link-to}}
+          {{#each workspace in workspaces}}
+          li.list-group-item {{#link-to 'workspace' workspace.id}}{{workspace.name}}{{/link-to}}
           {{/each}}
       
         {{#if makingNewWorkspace}}  

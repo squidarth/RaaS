@@ -55,8 +55,8 @@ App.File = DS.Model.extend({
 App.Router.map(function() {
   this.resource('home', {path: '/'}); 
   this.resource('about');
-  this.resource("workspaces"); 
-  this.resource("workspace", {path: "/workspace/:workspace_id"}); 
+  this.resource("workspaces");
+  this.resource("workspace", {path: "/workspace/:workspace_id"});
   this.resource("settings"); 
   this.resource('posts', function() {
     this.resource('post', {path: ":post_id"});
